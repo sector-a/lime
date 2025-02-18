@@ -3,7 +3,6 @@ package org.haxe.lime;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Build;
@@ -16,8 +15,8 @@ import android.util.Log;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
-import android.Manifest;
 import org.haxe.extension.Extension;
 import org.libsdl.app.SDLActivity;
 
@@ -108,17 +107,14 @@ public class GameActivity extends SDLActivity {
 
 
 	protected void onCreate (Bundle state) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+			getWindow ().addFlags (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+		}
 
 		super.onCreate (state);
 
 		assetManager = getAssets ();
-
-		if (checkSelfPermission(Manifest.permission.VIBRATE) == PackageManager.PERMISSION_GRANTED) {
-
-			vibrator = (Vibrator)mSingleton.getSystemService (Context.VIBRATOR_SERVICE);
-
-		}
-
+		vibrator = (Vibrator)mSingleton.getSystemService (Context.VIBRATOR_SERVICE);
 		handler = new Handler ();
 
 		Extension.assetManager = assetManager;
